@@ -1,0 +1,369 @@
+.model maj_fb_27
+.inputs x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18 x19 x20 x21 x22 x23 x24 x25 x26
+.outputs maj
+.names K1
+1
+.names x0 x1 x2 raw_c_c0_0
+011 1
+101 1
+110 1
+111 1
+.names x0 x1 x2 fa0_op1
+001 1
+010 1
+011 1
+111 1
+.names fa0_op1 raw_c_c0_0 x0 raw_s_c0_0
+001 1
+100 1
+101 1
+111 1
+.names x3 x4 x5 raw_c_c0_1
+011 1
+101 1
+110 1
+111 1
+.names x3 x4 x5 fa1_op1
+001 1
+010 1
+011 1
+111 1
+.names fa1_op1 raw_c_c0_1 x3 raw_s_c0_1
+001 1
+100 1
+101 1
+111 1
+.names x6 x7 x8 raw_c_c0_2
+011 1
+101 1
+110 1
+111 1
+.names x6 x7 x8 fa2_op1
+001 1
+010 1
+011 1
+111 1
+.names fa2_op1 raw_c_c0_2 x6 raw_s_c0_2
+001 1
+100 1
+101 1
+111 1
+.names x10 x11 x9 raw_c_c0_3
+011 1
+101 1
+110 1
+111 1
+.names x10 x11 x9 fa3_op1
+010 1
+100 1
+110 1
+111 1
+.names fa3_op1 raw_c_c0_3 x9 raw_s_c0_3
+001 1
+100 1
+101 1
+111 1
+.names x12 x13 x14 raw_c_c0_4
+011 1
+101 1
+110 1
+111 1
+.names x12 x13 x14 fa4_op1
+001 1
+010 1
+011 1
+111 1
+.names fa4_op1 raw_c_c0_4 x12 raw_s_c0_4
+001 1
+100 1
+101 1
+111 1
+.names x15 x16 x17 raw_c_c0_5
+011 1
+101 1
+110 1
+111 1
+.names x15 x16 x17 fa5_op1
+001 1
+010 1
+011 1
+111 1
+.names fa5_op1 raw_c_c0_5 x15 raw_s_c0_5
+001 1
+100 1
+101 1
+111 1
+.names x18 x19 x20 raw_c_c0_6
+011 1
+101 1
+110 1
+111 1
+.names x18 x19 x20 fa6_op1
+001 1
+010 1
+011 1
+111 1
+.names fa6_op1 raw_c_c0_6 x18 raw_s_c0_6
+001 1
+100 1
+101 1
+111 1
+.names x21 x22 x23 raw_c_c0_7
+011 1
+101 1
+110 1
+111 1
+.names x21 x22 x23 fa7_op1
+001 1
+010 1
+011 1
+111 1
+.names fa7_op1 raw_c_c0_7 x21 raw_s_c0_7
+001 1
+100 1
+101 1
+111 1
+.names x24 x25 x26 raw_c_c0_8
+011 1
+101 1
+110 1
+111 1
+.names x24 x25 x26 fa8_op1
+001 1
+010 1
+011 1
+111 1
+.names fa8_op1 raw_c_c0_8 x24 raw_s_c0_8
+001 1
+100 1
+101 1
+111 1
+.names raw_s_c0_0 raw_s_c0_1 raw_s_c0_2 c_c0_9
+011 1
+101 1
+110 1
+111 1
+.names raw_s_c0_0 raw_s_c0_1 raw_s_c0_2 fa9_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c0_9 fa9_op1 raw_s_c0_0 s_c0_9
+001 1
+010 1
+011 1
+111 1
+.names raw_s_c0_3 raw_s_c0_4 s_c0_9 c_c0_10
+011 1
+101 1
+110 1
+111 1
+.names raw_s_c0_3 raw_s_c0_4 s_c0_9 fa10_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c0_10 fa10_op1 s_c0_9 s_c0_10
+001 1
+010 1
+011 1
+111 1
+.names raw_s_c0_5 raw_s_c0_6 s_c0_10 c_c0_11
+011 1
+101 1
+110 1
+111 1
+.names raw_s_c0_5 raw_s_c0_6 s_c0_10 fa11_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c0_11 fa11_op1 s_c0_10 s_c0_11
+001 1
+010 1
+011 1
+111 1
+.names raw_s_c0_7 raw_s_c0_8 s_c0_11 c_c0_12
+011 1
+101 1
+110 1
+111 1
+.names raw_s_c0_7 raw_s_c0_8 s_c0_11 fa12_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c0_12 fa12_op1 s_c0_11 s_c0_12
+001 1
+010 1
+011 1
+111 1
+.names raw_c_c0_0 raw_c_c0_1 raw_c_c0_2 c_c1_13
+011 1
+101 1
+110 1
+111 1
+.names raw_c_c0_0 raw_c_c0_1 raw_c_c0_2 fa13_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c1_13 fa13_op1 raw_c_c0_0 s_c1_13
+001 1
+010 1
+011 1
+111 1
+.names raw_c_c0_3 raw_c_c0_4 s_c1_13 c_c1_14
+011 1
+101 1
+110 1
+111 1
+.names raw_c_c0_3 raw_c_c0_4 s_c1_13 fa14_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c1_14 fa14_op1 s_c1_13 s_c1_14
+001 1
+010 1
+011 1
+111 1
+.names raw_c_c0_5 raw_c_c0_6 s_c1_14 c_c1_15
+011 1
+101 1
+110 1
+111 1
+.names raw_c_c0_5 raw_c_c0_6 s_c1_14 fa15_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c1_15 fa15_op1 s_c1_14 s_c1_15
+001 1
+010 1
+011 1
+111 1
+.names raw_c_c0_7 raw_c_c0_8 s_c1_15 c_c1_16
+011 1
+101 1
+110 1
+111 1
+.names raw_c_c0_7 raw_c_c0_8 s_c1_15 fa16_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c1_16 fa16_op1 s_c1_15 s_c1_16
+001 1
+010 1
+011 1
+111 1
+.names c_c0_10 c_c0_9 s_c1_16 c_c1_17
+011 1
+101 1
+110 1
+111 1
+.names c_c0_10 c_c0_9 s_c1_16 fa17_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c1_17 fa17_op1 s_c1_16 s_c1_17
+001 1
+010 1
+011 1
+111 1
+.names c_c0_11 c_c0_12 s_c1_17 c_c1_18
+011 1
+101 1
+110 1
+111 1
+.names c_c0_11 c_c0_12 s_c1_17 fa18_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c1_18 fa18_op1 s_c1_17 s_c1_18
+001 1
+010 1
+011 1
+111 1
+.names CONST0 K1 s_c1_18 p_c_c1_19
+011 1
+101 1
+110 1
+111 1
+.names CONST0 K1 s_c1_18 fa19_op1
+010 1
+100 1
+110 1
+111 1
+.names fa19_op1 p_c_c1_19 s_c1_18 p_s_c1_19
+001 1
+100 1
+101 1
+111 1
+.names c_c1_13 c_c1_14 c_c1_15 c_c2_20
+011 1
+101 1
+110 1
+111 1
+.names c_c1_13 c_c1_14 c_c1_15 fa20_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c1_13 c_c2_20 fa20_op1 s_c2_20
+001 1
+100 1
+101 1
+111 1
+.names c_c1_16 c_c1_17 s_c2_20 c_c2_21
+011 1
+101 1
+110 1
+111 1
+.names c_c1_16 c_c1_17 s_c2_20 fa21_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c2_21 fa21_op1 s_c2_20 s_c2_21
+001 1
+010 1
+011 1
+111 1
+.names c_c1_18 p_c_c1_19 s_c2_21 c_c2_22
+011 1
+101 1
+110 1
+111 1
+.names c_c1_18 p_c_c1_19 s_c2_21 fa22_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c2_22 fa22_op1 s_c2_21 s_c2_22
+001 1
+010 1
+011 1
+111 1
+.names c_c2_20 c_c2_21 c_c2_22 c_c3_23
+011 1
+101 1
+110 1
+111 1
+.names c_c2_20 c_c2_21 c_c2_22 fa23_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c2_20 c_c3_23 fa23_op1 s_c3_23
+001 1
+100 1
+101 1
+111 1
+.names CONST0
+.names c_c3_23 maj
+1 1
+.end

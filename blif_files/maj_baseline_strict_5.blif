@@ -1,0 +1,120 @@
+.model maj_baseline_strict_5
+.inputs x0 x1 x2 x3 x4
+.outputs maj
+.names T0
+1
+.names T1
+1
+.names c2_0
+1
+.names x0 x1 x2 raw_c_c0_0
+011 1
+101 1
+110 1
+111 1
+.names x0 x1 x2 fa0_op1
+001 1
+010 1
+011 1
+111 1
+.names fa0_op1 raw_c_c0_0 x0 raw_s_c0_0
+001 1
+100 1
+101 1
+111 1
+.names CONST1 x3 x4 raw_c_c0_1
+011 1
+101 1
+110 1
+111 1
+.names CONST1 x3 x4 fa1_op1
+001 1
+100 1
+101 1
+111 1
+.names fa1_op1 raw_c_c0_1 x3 raw_s_c0_1
+001 1
+100 1
+101 1
+111 1
+.names CONST0 raw_s_c0_0 raw_s_c0_1 c_c0_2
+011 1
+101 1
+110 1
+111 1
+.names CONST0 raw_s_c0_0 raw_s_c0_1 fa2_op1
+001 1
+100 1
+101 1
+111 1
+.names c_c0_2 fa2_op1 raw_s_c0_0 s_c0_2
+001 1
+010 1
+011 1
+111 1
+.names c_c0_2 raw_c_c0_0 raw_c_c0_1 c_c1_3
+011 1
+101 1
+110 1
+111 1
+.names c_c0_2 raw_c_c0_0 raw_c_c0_1 fa3_op1
+001 1
+100 1
+101 1
+111 1
+.names c_c1_3 fa3_op1 raw_c_c0_0 s_c1_3
+001 1
+010 1
+011 1
+111 1
+.names T0 c2_0 s_c0_2 c2_1
+011 1
+101 1
+110 1
+111 1
+.names T0 c2_0 s_c0_2 fa4_op1
+010 1
+100 1
+110 1
+111 1
+.names c2_1 fa4_op1 s_c0_2 s2_0
+001 1
+010 1
+011 1
+111 1
+.names T1 c2_1 s_c1_3 c2_2
+011 1
+101 1
+110 1
+111 1
+.names T1 c2_1 s_c1_3 fa5_op1
+010 1
+100 1
+110 1
+111 1
+.names c2_2 fa5_op1 s_c1_3 s2_1
+001 1
+010 1
+011 1
+111 1
+.names CONST0 c2_2 c_c1_3 c2_3
+011 1
+101 1
+110 1
+111 1
+.names CONST0 c2_2 c_c1_3 fa6_op1
+010 1
+100 1
+110 1
+111 1
+.names c2_3 c_c1_3 fa6_op1 s2_2
+001 1
+010 1
+011 1
+111 1
+.names CONST1
+1
+.names CONST0
+.names c2_3 maj
+1 1
+.end

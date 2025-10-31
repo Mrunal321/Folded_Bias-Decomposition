@@ -1,0 +1,144 @@
+.model maj_fb_11
+.inputs x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10
+.outputs maj
+.names K1
+1
+.names x0 x1 x2 raw_c_c0_0
+011 1
+101 1
+110 1
+111 1
+.names x0 x1 x2 fa0_op1
+001 1
+010 1
+011 1
+111 1
+.names fa0_op1 raw_c_c0_0 x0 raw_s_c0_0
+001 1
+100 1
+101 1
+111 1
+.names x3 x4 x5 raw_c_c0_1
+011 1
+101 1
+110 1
+111 1
+.names x3 x4 x5 fa1_op1
+001 1
+010 1
+011 1
+111 1
+.names fa1_op1 raw_c_c0_1 x3 raw_s_c0_1
+001 1
+100 1
+101 1
+111 1
+.names x6 x7 x8 raw_c_c0_2
+011 1
+101 1
+110 1
+111 1
+.names x6 x7 x8 fa2_op1
+001 1
+010 1
+011 1
+111 1
+.names fa2_op1 raw_c_c0_2 x6 raw_s_c0_2
+001 1
+100 1
+101 1
+111 1
+.names raw_s_c0_0 raw_s_c0_1 raw_s_c0_2 c_c0_3
+011 1
+101 1
+110 1
+111 1
+.names raw_s_c0_0 raw_s_c0_1 raw_s_c0_2 fa3_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c0_3 fa3_op1 raw_s_c0_0 s_c0_3
+001 1
+010 1
+011 1
+111 1
+.names s_c0_3 x10 x9 c_c0_4
+011 1
+101 1
+110 1
+111 1
+.names s_c0_3 x10 x9 fa4_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c0_4 fa4_op1 s_c0_3 s_c0_4
+001 1
+010 1
+011 1
+111 1
+.names raw_c_c0_0 raw_c_c0_1 raw_c_c0_2 c_c1_5
+011 1
+101 1
+110 1
+111 1
+.names raw_c_c0_0 raw_c_c0_1 raw_c_c0_2 fa5_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c1_5 fa5_op1 raw_c_c0_0 s_c1_5
+001 1
+010 1
+011 1
+111 1
+.names c_c0_3 c_c0_4 s_c1_5 c_c1_6
+011 1
+101 1
+110 1
+111 1
+.names c_c0_3 c_c0_4 s_c1_5 fa6_op1
+010 1
+100 1
+110 1
+111 1
+.names c_c1_6 fa6_op1 s_c1_5 s_c1_6
+001 1
+010 1
+011 1
+111 1
+.names CONST0 K1 s_c1_6 p_c_c1_7
+011 1
+101 1
+110 1
+111 1
+.names CONST0 K1 s_c1_6 fa7_op1
+010 1
+100 1
+110 1
+111 1
+.names fa7_op1 p_c_c1_7 s_c1_6 p_s_c1_7
+001 1
+100 1
+101 1
+111 1
+.names c_c1_5 c_c1_6 p_c_c1_7 c_c2_8
+011 1
+101 1
+110 1
+111 1
+.names c_c1_5 c_c1_6 p_c_c1_7 fa8_op1
+001 1
+010 1
+011 1
+111 1
+.names c_c1_5 c_c2_8 fa8_op1 s_c2_8
+001 1
+100 1
+101 1
+111 1
+.names CONST0
+.names c_c2_8 maj
+1 1
+.end
