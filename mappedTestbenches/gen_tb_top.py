@@ -18,8 +18,11 @@ def header_strings(n: int):
 def gen_tb_top(n: int, module_name: str = "top") -> str:
     if n < 1:
         raise ValueError("n must be >= 1")
+    # if n > :
+    #     raise ValueError("n must be <= 63 so TOTAL_VECTORS fits in a 64-bit counter")
     cw = bits_needed(n)
     th = math.ceil(n/2)
+    total_vectors = 1 << n
 
     x_ports_one_line = make_x_port_map_one_line(n)
     title, dashes = header_strings(n)
@@ -32,6 +35,7 @@ module tb_top;
   // {n}-bit input vector
   reg  [{n-1}:0] x = {n}'b0;
   wire       y0;
+  reg  [63:0] idx;
 
   // DUT instantiation
   {module_name} dut (
@@ -53,14 +57,16 @@ module tb_top;
   // Reference majority: at least {th} ones
   wire y_ref = (popcount(x) >= {th});
 
+  localparam [63:0] TOTAL_VECTORS = 64'd{total_vectors};
+
   initial begin
     $display("{title}");
     $display("{dashes}");
     // Loop through all {1<<n} combinations
-    repeat ({1<<n}) begin
+    for (idx = 0; idx < TOTAL_VECTORS; idx = idx + 1) begin
+      x = idx[{n-1}:0];
       #10 $display("%4t |  %b  |   %b       %b",
                    $time, x, y0, y_ref);
-      x = x + 1;
     end
     #10 $finish;
   end

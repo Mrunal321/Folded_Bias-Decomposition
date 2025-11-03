@@ -5,6 +5,7 @@ module tb_top;
   // 55-bit input vector
   reg  [54:0] x = 55'b0;
   wire       y0;
+  reg  [63:0] idx;
 
   // DUT instantiation
   top dut (
@@ -26,14 +27,16 @@ module tb_top;
   // Reference majority: at least 28 ones
   wire y_ref = (popcount(x) >= 28);
 
+  localparam [63:0] TOTAL_VECTORS = 64'd36028797018963968;
+
   initial begin
     $display("Time | x54 x53 x52 x51 x50 x49 x48 x47 x46 x45 x44 x43 x42 x41 x40 x39 x38 x37 x36 x35 x34 x33 x32 x31 x30 x29 x28 x27 x26 x25 x24 x23 x22 x21 x20 x19 x18 x17 x16 x15 x14 x13 x12 x11 x10 x9 x8 x7 x6 x5 x4 x3 x2 x1 x0 | y0 (DUT) y_ref (Maj55)");
     $display("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     // Loop through all 36028797018963968 combinations
-    repeat (36028797018963968) begin
+    for (idx = 0; idx < TOTAL_VECTORS; idx = idx + 1) begin
+      x = idx[54:0];
       #10 $display("%4t |  %b  |   %b       %b",
                    $time, x, y0, y_ref);
-      x = x + 1;
     end
     #10 $finish;
   end
