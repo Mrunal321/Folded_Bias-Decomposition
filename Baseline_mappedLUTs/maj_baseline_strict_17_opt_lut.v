@@ -1,0 +1,28 @@
+module top (x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, y0);
+  input x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16;
+  output y0;
+  wire n19, n20, n21, n22, n23, n24, n25, n26, n27, n28, n29, n30, n31, n32, n33, n34, n35, n36, n37, n38, n39, n40;
+  LUT3 #(.INIT(8'hE8)) lut_n19 (.I0(x0), .I1(x1), .I2(x2), .O(n19));
+  LUT3 #(.INIT(8'hE8)) lut_n20 (.I0(x6), .I1(x7), .I2(x8), .O(n20));
+  LUT5 #(.INIT(32'hFFE8E800)) lut_n21 (.I0(x3), .I1(x4), .I2(x5), .I3(n19), .I4(n20), .O(n21));
+  LUT3 #(.INIT(8'hE8)) lut_n22 (.I0(x12), .I1(x13), .I2(x14), .O(n22));
+  LUT5 #(.INIT(32'hE81717E8)) lut_n23 (.I0(x3), .I1(x4), .I2(x5), .I3(n19), .I4(n20), .O(n23));
+  LUT5 #(.INIT(32'hFFE8E800)) lut_n24 (.I0(x9), .I1(x10), .I2(x11), .I3(n22), .I4(n23), .O(n24));
+  LUT5 #(.INIT(32'hE81717E8)) lut_n25 (.I0(x9), .I1(x10), .I2(x11), .I3(n22), .I4(n23), .O(n25));
+  LUT3 #(.INIT(8'hFE)) lut_n26 (.I0(x15), .I1(x16), .I2(n25), .O(n26));
+  LUT3 #(.INIT(8'hE8)) lut_n27 (.I0(n21), .I1(n24), .I2(n26), .O(n27));
+  LUT3 #(.INIT(8'h1E)) lut_n28 (.I0(x15), .I1(x16), .I2(n25), .O(n28));
+  LUT3 #(.INIT(8'h96)) lut_n29 (.I0(x0), .I1(x1), .I2(x2), .O(n29));
+  LUT3 #(.INIT(8'h96)) lut_n30 (.I0(x6), .I1(x7), .I2(x8), .O(n30));
+  LUT5 #(.INIT(32'hFF969600)) lut_n31 (.I0(x3), .I1(x4), .I2(x5), .I3(n29), .I4(n30), .O(n31));
+  LUT3 #(.INIT(8'h96)) lut_n32 (.I0(n21), .I1(n24), .I2(n26), .O(n32));
+  LUT3 #(.INIT(8'h96)) lut_n33 (.I0(x12), .I1(x13), .I2(x14), .O(n33));
+  LUT5 #(.INIT(32'h96696996)) lut_n34 (.I0(x3), .I1(x4), .I2(x5), .I3(n29), .I4(n30), .O(n34));
+  LUT5 #(.INIT(32'hFF969600)) lut_n35 (.I0(x9), .I1(x10), .I2(x11), .I3(n33), .I4(n34), .O(n35));
+  LUT5 #(.INIT(32'h96696996)) lut_n36 (.I0(x9), .I1(x10), .I2(x11), .I3(n33), .I4(n34), .O(n36));
+  LUT2 #(.INIT(4'h6)) lut_n37 (.I0(n28), .I1(n31), .O(n37));
+  LUT5 #(.INIT(32'hFFF9F090)) lut_n38 (.I0(x15), .I1(x16), .I2(n35), .I3(n36), .I4(n37), .O(n38));
+  LUT5 #(.INIT(32'h90060960)) lut_n39 (.I0(x15), .I1(x16), .I2(n35), .I3(n36), .I4(n37), .O(n39));
+  LUT6 #(.INIT(64'hFBAAAAA2AAA2A200)) lut_n40 (.I0(n27), .I1(n28), .I2(n31), .I3(n32), .I4(n38), .I5(n39), .O(n40));
+  assign y0 = n40;
+endmodule
