@@ -163,7 +163,7 @@ For visualization, the separate helper `verilog_draw.py` can draw either module
 directly from the emitted Verilog:
 
 ```bash
-python3 ~..../paper2/verilog_draw.py \
+python3 verilog_draw.py \
   "/path/to/maj9_generated_canon.v" \
   --top maj_baseline_strict_9 \
   --out-img figures/maj_baseline_strict_9.png
