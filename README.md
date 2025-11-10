@@ -27,7 +27,7 @@ The configuration block near the top of the file controls everything:
 | `OUTPUT_NAME` | Base filename for the Verilog bundle. |
 | `INCLUDE_FOLDED_BIAS` | Emit the folded-bias CSA-only implementation `maj_fb_<n>` and its BLIF. |
 | `INCLUDE_BASELINE_STRICT` | Emit the baseline “HW + threshold compare” implementation `maj_baseline_strict_<n>` and its BLIF. |
-| `INCLUDE_FOLDED_BIAS_MAJP` / `INCLUDE_BASELINE_MAJP` | Enable the optional “majpath” wrappers that map an `n`-input design into the next scaffold size (disabled by default). |
+| `INCLUDE_FOLDED_BIAS_MAJP` / `INCLUDE_BASELINE_MAJP` | Enable the optional “majpath” wrappers that map an `n`-input design into the next scaffold size (disabled by default) (Still under production , NOT ADVISABLE). |
 | `MAJ_ONLY_FA` | Controls how each full adder is expanded inside the BLIF (MAJ+NOT only vs XOR/MAJ). |
 
 Changing any knob requires re-running the script.
