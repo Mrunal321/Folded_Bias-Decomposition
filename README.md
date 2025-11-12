@@ -1,4 +1,4 @@
-## `final_generator.py` Reference
+## `final_generator.py`
 
 This script is the single entry point used to emit both Verilog and BLIF
 netlists for all majority designs evaluated in the project.  It lives in  
