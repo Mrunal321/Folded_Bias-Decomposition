@@ -24,7 +24,7 @@ Notes on BLIF canonicalization:
 # ===================== CONFIG =====================
 N = 9  # majority input size (odd, >=3)
 
-OUTPUT_DIR = r"/home/mrunal/Desktop/paper2/Final_Results/fixed_Linear_blif_files_for_paper2(without Scaffold)"
+OUTPUT_DIR = r"/home"
 OUTPUT_NAME = f"maj{N}_generated_canon.v"
 
 INCLUDE_FOLDED_BIAS       = True   # maj_fb_<n>
