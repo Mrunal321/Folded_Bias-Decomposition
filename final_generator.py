@@ -24,21 +24,18 @@ Notes on BLIF canonicalization:
 # ===================== CONFIG =====================
 N = 9  # majority input size (odd, >=3)
 
-OUTPUT_DIR = r"/home"
+OUTPUT_DIR = r"/home/mrunal/Desktop/paper2/Final_Results/fixed_Linear_blif_files_for_paper2(without Scaffold)"
 OUTPUT_NAME = f"maj{N}_generated_canon.v"
 
 INCLUDE_FOLDED_BIAS       = True   # maj_fb_<n>
 INCLUDE_BASELINE_STRICT   = True   # maj_baseline_strict_<n>
-INCLUDE_FOLDED_BIAS_MAJP  = 0   # maj_fb_majpath_<n>
-INCLUDE_BASELINE_MAJP     = 0   # maj_baseline_majpath_<n>
-
 # BLIF adder style:
 #   True  = expand FA as MAJ-only (3x MAJ + 2x INV)  [best for MIG passes]
 #   False = expand FA with {XOR3 for sum, MAJ3 for cout}
 MAJ_ONLY_FA = True
 # ===================================================
 
-import os, math, random
+import os, math
 from collections import defaultdict, deque
 
 # ---------- common helpers ----------
@@ -183,140 +180,6 @@ def csa_macro_schedule_all_columns(raw_inputs, const_names_per_col):
 
 
 # ---------- scaffold + reduction helpers ----------
-def _scaffold_params(n: int):
-    """
-    Minimal scaffold via reduction rule Maj_{2k+1}(x) = Maj_{2(k+1)+1}(0,1,x).
-    For target n = 2k+1 we embed into N_big = n + 2.
-    """
-    k = (n - 1) // 2
-    n_big = k + 1
-    N_big = 2 * n_big + 1  # n + 2
-    m = math.ceil(math.log2(N_big + 1))
-    num_fix = n_big - k    # always 1 for this minimal scaffold
-    return m, N_big, m, num_fix
-
-
-def _scaffold_layout_sequences(n: int, num_fix: int, N_big: int):
-    if num_fix <= 0:
-        return [("identity", [('x', i) for i in range(n)])]
-
-    layouts = []
-
-    def layout_clustered():
-        seq = [('x', i) for i in range(n)]
-        for idx in range(num_fix):
-            seq.append(('1', idx))
-            seq.append(('0', idx))
-        return seq
-
-    def layout_interleaved():
-        seq = []
-        ones_idx = zeros_idx = 0
-        for idx in range(n):
-            seq.append(('x', idx))
-            if ones_idx < num_fix:
-                seq.append(('1', ones_idx)); ones_idx += 1
-            if zeros_idx < num_fix:
-                seq.append(('0', zeros_idx)); zeros_idx += 1
-        while ones_idx < num_fix or zeros_idx < num_fix:
-            if ones_idx < num_fix:
-                seq.append(('1', ones_idx)); ones_idx += 1
-            if zeros_idx < num_fix:
-                seq.append(('0', zeros_idx)); zeros_idx += 1
-        return seq
-
-    def layout_alternating():
-        seq = []
-        ones_idx = zeros_idx = 0
-        x_idx = 0
-        while len(seq) < N_big:
-            if x_idx < n:
-                seq.append(('x', x_idx)); x_idx += 1
-            if ones_idx < num_fix and len(seq) < N_big:
-                seq.append(('1', ones_idx)); ones_idx += 1
-            if x_idx < n and len(seq) < N_big:
-                seq.append(('x', x_idx)); x_idx += 1
-            if zeros_idx < num_fix and len(seq) < N_big:
-                seq.append(('0', zeros_idx)); zeros_idx += 1
-        while x_idx < n and len(seq) < N_big:
-            seq.append(('x', x_idx)); x_idx += 1
-        while ones_idx < num_fix and len(seq) < N_big:
-            seq.append(('1', ones_idx)); ones_idx += 1
-        while zeros_idx < num_fix and len(seq) < N_big:
-            seq.append(('0', zeros_idx)); zeros_idx += 1
-        return seq
-
-    def layout_alt_offset1():
-        seq = []
-        ones_idx = zeros_idx = 0
-        x_idx = 0
-        toggle = 0
-        while len(seq) < N_big:
-            if toggle % 2 == 0 and x_idx < n:
-                seq.append(('x', x_idx)); x_idx += 1
-            elif toggle % 4 == 1 and ones_idx < num_fix:
-                seq.append(('1', ones_idx)); ones_idx += 1
-            elif toggle % 4 == 3 and zeros_idx < num_fix:
-                seq.append(('0', zeros_idx)); zeros_idx += 1
-            else:
-                if x_idx < n:
-                    seq.append(('x', x_idx)); x_idx += 1
-                elif ones_idx < num_fix:
-                    seq.append(('1', ones_idx)); ones_idx += 1
-                elif zeros_idx < num_fix:
-                    seq.append(('0', zeros_idx)); zeros_idx += 1
-            toggle += 1
-        return seq[:N_big]
-
-    layouts.append(("clustered", layout_clustered()))
-    layouts.append(("interleaved", layout_interleaved()))
-    layouts.append(("alternating", layout_alternating()))
-    layouts.append(("alt_off1", layout_alt_offset1()))
-
-    base = [('x', i) for i in range(n)] + [('1', i) for i in range(num_fix)] + [('0', i) for i in range(num_fix)]
-    for seed in range(12):
-        random.seed(seed)
-        seq = base[:]
-        random.shuffle(seq)
-        layouts.append((f"rand{seed}", seq[:N_big]))
-
-    return [(name, seq[:N_big]) for name, seq in layouts]
-
-
-def _tokens_to_mapping(sequence):
-    mapping = []
-    for kind, idx in sequence:
-        if kind == 'x':
-            mapping.append(f"x[{idx}]")
-        elif kind == '1':
-            mapping.append("1'b1")
-        else:
-            mapping.append("1'b0")
-    return mapping
-
-
-def _remap_signal(sig: str, mapping):
-    if sig.startswith('x[') and sig.endswith(']'):
-        try:
-            idx = int(sig[2:-1])
-        except ValueError:
-            return sig
-        if 0 <= idx < len(mapping):
-            return mapping[idx]
-    return sig
-
-
-def _apply_mapping_to_netlist(fa_ops, maj_signal, mapping):
-    remapped_ops = []
-    for a, b, cin, s, k in fa_ops:
-        ra = _remap_signal(a, mapping)
-        rb = _remap_signal(b, mapping)
-        rc = _remap_signal(cin, mapping)
-        remapped_ops.append((ra, rb, rc, s, k))
-    remapped_maj = _remap_signal(maj_signal, mapping)
-    return remapped_ops, remapped_maj
-
-
 def _is_const(sig: str) -> bool:
     return sig in ("1'b0", "1'b1")
 
@@ -376,27 +239,6 @@ def _prepare_for_emit(fa_ops, maj_signal, const_candidates):
     fa_ops_prepped, maj_signal_prepped = _constant_fold_and_prune(list(fa_ops), maj_signal)
     const_used = _collect_const_names(fa_ops_prepped, maj_signal_prepped, const_candidates)
     return fa_ops_prepped, maj_signal_prepped, const_used
-
-
-def _select_scaffold_layout(n, fa_ops, maj_signal, const1_names, num_fix: int, N_big: int):
-    layouts = _scaffold_layout_sequences(n, num_fix, N_big)
-    best = None
-    for idx, (label, seq) in enumerate(layouts):
-        mapping = _tokens_to_mapping(seq)
-        mapped_ops, mapped_maj = _apply_mapping_to_netlist(fa_ops, maj_signal, mapping)
-        mapped_ops, mapped_maj = _constant_fold_and_prune(mapped_ops, mapped_maj)
-        const_used = _collect_const_names(mapped_ops, mapped_maj, const1_names)
-        score = (len(mapped_ops), idx)
-        if best is None or score < best['score']:
-            best = {
-                'score': score,
-                'label': label,
-                'mapping': mapping,
-                'fa_ops': mapped_ops,
-                'maj_signal': mapped_maj,
-                'const1_names': const_used,
-            }
-    return best
 
 # ======== 1) Proposed: Folded-Bias (CSA-only to bit w) ========
 def emit_folded_bias(n: int):
@@ -821,37 +663,6 @@ def build_folded_bias_netlist(n: int):
 
     return fa_ops, const1_names, maj_out
 
-
-
-
-
-def emit_folded_bias_majpath_wrapper(n: int, N_big: int, mapping, layout_label: str):
-    lines = []
-    lines += _verilog_header(n, "Folded-Bias Majority (Maj-path constant fixing)")
-    lines.append(f"module maj_fb_majpath_{n} (input  wire [{n-1}:0] x, output wire maj);")
-    lines.append(f"  // Derived from maj_fb_{N_big} with layout='{layout_label}'")
-    lines.append(f"  wire [{N_big-1}:0] x_big;")
-    for idx, source in enumerate(mapping):
-        lines.append(f"  assign x_big[{idx}] = {source};")
-    lines.append(f"  maj_fb_{N_big} u_fb_big(.x(x_big), .maj(maj));")
-    lines.append("endmodule")
-    lines.append("")
-    return '\n'.join(lines)
-
-
-def emit_baseline_majpath_wrapper(n: int, N_big: int, mapping, layout_label: str):
-    lines = []
-    lines += _verilog_header(n, "Baseline STRICT (Maj-path constant fixing)")
-    lines.append(f"module maj_baseline_majpath_{n} (input  wire [{n-1}:0] x, output wire maj);")
-    lines.append(f"  // Derived from maj_baseline_strict_{N_big} with layout='{layout_label}'")
-    lines.append(f"  wire [{N_big-1}:0] x_big;")
-    for idx, source in enumerate(mapping):
-        lines.append(f"  assign x_big[{idx}] = {source};")
-    lines.append(f"  maj_baseline_strict_{N_big} u_base_big(.x(x_big), .maj(maj));")
-    lines.append("endmodule")
-    lines.append("")
-    return '\n'.join(lines)
-
 def build_baseline_strict_netlist(n: int):
     assert n % 2 == 1 and n >= 3
 
@@ -908,18 +719,12 @@ def main():
         "// Top modules present (depending on config):",
         "//   - maj_fb_<n>                (folded-bias; CSA-only, macro schedule)",
         "//   - maj_baseline_strict_<n>   (baseline threshold path)",
-        "//   - maj_fb_majpath_<n>        (folded-bias; scaffold constant-fix)",
-        "//   - maj_baseline_majpath_<n>  (baseline STRICT; scaffold constant-fix)",
         "// You must provide: module fa(input a,b,cin, output sum,cout);",
         ""
     ]
 
-    p_scaffold, N_scaffold, _, num_fix_pairs = _scaffold_params(N)
-
     fb_direct_data = None
     bs_direct_data = None
-    fb_maj_data = None
-    bs_maj_data = None
 
     if INCLUDE_FOLDED_BIAS:
         v_fb, cnt_fb, _, _, _, fb_stats = emit_folded_bias(N)
@@ -932,28 +737,6 @@ def main():
         add_module(v_bs, f"maj_baseline_strict_{N}")
         counts.append(("baseline_strict", cnt_bs))
         bs_direct_data = build_baseline_strict_netlist(N)
-
-    if INCLUDE_FOLDED_BIAS_MAJP and num_fix_pairs > 0:
-        fb_big_ops, fb_big_const, fb_big_out = build_folded_bias_netlist(N_scaffold)
-        fb_selection = _select_scaffold_layout(N, fb_big_ops, fb_big_out, fb_big_const, num_fix_pairs, N_scaffold)
-        fb_maj_data = fb_selection
-        if N_scaffold != N or not INCLUDE_FOLDED_BIAS:
-            v_fb_big, _, _, _, _, _ = emit_folded_bias(N_scaffold)
-            add_module(v_fb_big, f"maj_fb_{N_scaffold}")
-        wrapper = emit_folded_bias_majpath_wrapper(N, N_scaffold, fb_selection['mapping'], fb_selection['label'])
-        add_module(wrapper, f"maj_fb_majpath_{N}")
-        counts.append(("folded_bias_majpath", len(fb_selection['fa_ops'])))
-
-    if INCLUDE_BASELINE_MAJP and num_fix_pairs > 0:
-        bs_big_ops, bs_big_const, bs_big_out = build_baseline_strict_netlist(N_scaffold)
-        bs_selection = _select_scaffold_layout(N, bs_big_ops, bs_big_out, bs_big_const, num_fix_pairs, N_scaffold)
-        bs_maj_data = bs_selection
-        if N_scaffold != N or not INCLUDE_BASELINE_STRICT:
-            v_bs_big, _, _, _, _, _ = emit_baseline_strict(N_scaffold)
-            add_module(v_bs_big, f"maj_baseline_strict_{N_scaffold}")
-        wrapper = emit_baseline_majpath_wrapper(N, N_scaffold, bs_selection['mapping'], bs_selection['label'])
-        add_module(wrapper, f"maj_baseline_majpath_{N}")
-        counts.append(("baseline_majpath", len(bs_selection['fa_ops'])))
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     out_v = os.path.join(OUTPUT_DIR, OUTPUT_NAME)
@@ -1008,34 +791,6 @@ def main():
             maj_only=MAJ_ONLY_FA,
         )
         print("Wrote BLIF (baseline threshold):", bs_blif)
-
-    if INCLUDE_FOLDED_BIAS_MAJP and fb_maj_data is not None:
-        fb_ops, fb_sig, fb_consts = fb_maj_data['fa_ops'], fb_maj_data['maj_signal'], fb_maj_data['const1_names']
-        fb_blif = os.path.join(OUTPUT_DIR, f"maj_fb_majpath_{N}.blif")
-        _write_blif_from_fas_canonical(
-            model_name=f"maj_fb_majpath_{N}",
-            n=N,
-            fa_ops=fb_ops,
-            maj_signal=fb_sig,
-            const1_names=fb_consts,
-            path=fb_blif,
-            maj_only=MAJ_ONLY_FA,
-        )
-        print("Wrote BLIF (folded-bias maj-path):", fb_blif)
-
-    if INCLUDE_BASELINE_MAJP and bs_maj_data is not None:
-        bs_ops, bs_sig, bs_consts = bs_maj_data['fa_ops'], bs_maj_data['maj_signal'], bs_maj_data['const1_names']
-        bs_blif = os.path.join(OUTPUT_DIR, f"maj_baseline_majpath_{N}.blif")
-        _write_blif_from_fas_canonical(
-            model_name=f"maj_baseline_majpath_{N}",
-            n=N,
-            fa_ops=bs_ops,
-            maj_signal=bs_sig,
-            const1_names=bs_consts,
-            path=bs_blif,
-            maj_only=MAJ_ONLY_FA,
-        )
-        print("Wrote BLIF (baseline maj-path):", bs_blif)
 
 if __name__ == "__main__":
     main()
