@@ -73,7 +73,6 @@ Each run creates the following artifacts under `OUTPUT_DIR`:
 | `maj<n>_generated_canon.v` | Verilog bundle containing the enabled modules (folded-bias, baseline, optional wrappers). |
 | `maj_fb_<n>.blif` | Canonical folded-bias BLIF using MAJ3/NOT/XOR3 encodings. |
 | `maj_baseline_strict_<n>.blif` | Canonical baseline BLIF. |
-| `maj_fb_majpath_<n>.blif`, `maj_baseline_majpath_<n>.blif` | Optional scaffolding wrappers when the MAJ-path flags are enabled. |
 
 BLIF emission is fully canonicalized (sorted inputs, deduplicated cubes, and
 explicit constants), which keeps downstream tools deterministic.
